@@ -38,3 +38,20 @@ def create_device(device: Device):
     new_device = device.model_dump()
     readings.append(new_device)
     return new_device
+
+
+@app.put("/devices/{name}")
+def update_device(name:str, device: Device):
+    for i, reading in enumerate(readings):
+        if reading["name"] == name:
+            idx = i
+            break
+    else:
+        raise HTTPException(status_code=404, detail="No device called " + name)
+
+    device_dict = device.model_dump()
+    readings[idx] = device_dict
+    return device_dict
+
+
+

@@ -53,5 +53,14 @@ def update_device(name:str, device: Device):
     readings[idx] = device_dict
     return device_dict
 
+@app.delete("/devices/{name}")
+def delete_device(name:str):
+    for reading in readings:
+        if reading["name"] == name:
+            readings.remove(reading)
+            break
+    else:
+        raise HTTPException(status_code=404, detail="No device called " + name)
 
+    return {"deleted": name}
 

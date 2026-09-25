@@ -36,6 +36,13 @@ def get_device(name: str):
 @app.post("/devices", status_code=201)
 def create_device(device: Device):
     new_device = device.model_dump()
+
+    for reading in readings:
+        if reading["name"] == new_device["name"]:
+            raise HTTPException(status_code=409, 
+                                detail="No device called " + new_device["name"] +  " already exists"
+                                )
+
     readings.append(new_device)
     return new_device
 
